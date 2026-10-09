@@ -245,15 +245,17 @@ impl Buffer {
         let line = self.line_string(cur.line);
         let trimmed = line.trim_start();
         let indent = &line[..line.len() - trimmed.len()];
-        let commented = if let Some(rest) = trimmed.strip_prefix(prefix) {
+        let was_commented = trimmed.starts_with(prefix);
+        let new_text = if let Some(rest) = trimmed.strip_prefix(prefix) {
             let rest = rest.strip_prefix(' ').unwrap_or(rest);
             format!("{indent}{rest}")
         } else {
             format!("{indent}{prefix} {trimmed}")
         };
-        self.lines[cur.line] = commented;
+        self.lines[cur.line] = new_text;
         self.touch();
-        trimmed.starts_with(prefix)
+        // Retorna `true` se a linha ficou comentada (i.e. foi adicionado um comentário).
+        !was_commented
     }
 
     /// Texto contido no intervalo `[a, b]` (assumindo `a <= b`).

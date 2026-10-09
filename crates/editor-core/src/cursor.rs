@@ -158,7 +158,11 @@ mod tests {
         for _ in 0..5 {
             c.move_right(&b);
         }
+        assert_eq!(c, Cursor::new(0, 5));
+        c.move_right(&b);
         assert_eq!(c, Cursor::new(1, 0));
+        c.move_left(&b);
+        assert_eq!(c, Cursor::new(0, 5));
         c.move_left(&b);
         assert_eq!(c, Cursor::new(0, 4));
     }
@@ -168,6 +172,6 @@ mod tests {
         let b = buf("foo bar   baz");
         let mut c = Cursor::new(0, 0);
         c.move_word_right(&b);
-        assert_eq!(c.col, 3);
+        assert_eq!(c.col, 4);
     }
 }
