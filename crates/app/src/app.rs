@@ -12,7 +12,7 @@ use openbrains_common::LanguageId;
 use openbrains_editor_core::{Buffer, Cursor, Span};
 
 use crate::editor_widget;
-use crate::Theme;
+use crate::theme::Theme;
 
 const MAX_TABS: usize = 32;
 
@@ -923,7 +923,7 @@ impl EditorApp {
         ui.separator();
 
         if let Some(tab) = self.tabs.get_mut(self.active) {
-            editor_widget::show(ui, tab, &self.theme, &self.ai);
+            crate::editor_widget::show(ui, tab, &self.theme, &self.ai);
         } else {
             ui.add_space(40.0);
             ui.label(
@@ -1048,7 +1048,7 @@ impl EditorApp {
                 .collapsible(false)
                 .resizable(false)
                 .default_width(460.0)
-                .anchor(egui::Align2::CENTER, Vec2::new(0.0, -40.0))
+                .anchor(egui::Align2::CENTER_CENTER, Vec2::new(0.0, -40.0))
                 .open(&mut open)
                 .show(ctx, |ui| {
                     let resp =

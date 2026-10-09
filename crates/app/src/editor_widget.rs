@@ -14,7 +14,8 @@ use openbrains_ai::AiEngine;
 use openbrains_common::LanguageId;
 use openbrains_editor_core::{highlight, Cursor, Span};
 
-use super::{order_cursors, Tab};
+use crate::app::{order_cursors, Tab};
+use crate::theme::Theme;
 
 const TOP_PAD: f32 = 8.0;
 const LEFT_PAD: f32 = 6.0;
@@ -91,7 +92,7 @@ fn indent_extra(prefix_line: &str, lang: LanguageId) -> &'static str {
 }
 
 /// Desenha o editor para a aba ativa.
-pub fn show(ui: &mut egui::Ui, tab: &mut Tab, theme: &super::Theme, ai: &AiEngine) {
+pub fn show(ui: &mut egui::Ui, tab: &mut Tab, theme: &Theme, ai: &AiEngine) {
     let ctx = ui.ctx().clone();
     let now = ctx.time();
     let font = FontId::monospace(theme.font_size);
@@ -525,7 +526,7 @@ fn galley_for(
     tab: &mut Tab,
     row: usize,
     font: &FontId,
-    theme: &super::Theme,
+    theme: &Theme,
 ) -> Arc<egui::Galley> {
     let cached = tab
         .galleys
@@ -761,7 +762,7 @@ fn draw_completion(
     ui: &mut egui::Ui,
     ctx: &egui::Context,
     tab: &mut Tab,
-    theme: &super::Theme,
+    theme: &Theme,
     ai: &AiEngine,
     rect: Rect,
     text_x: f32,
