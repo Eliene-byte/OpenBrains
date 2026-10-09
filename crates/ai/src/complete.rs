@@ -76,7 +76,7 @@ fn collect_locals(lines: &[String]) -> (Vec<String>, Vec<String>) {
                 let word: String = chars[start..i].iter().collect();
                 // pula espaços para ver se é uma chamada
                 let mut k = i;
-                while k < n && chars[k] == ' ' || chars[k] == '\t' {
+                while k < n && (chars[k] == ' ' || chars[k] == '\t') {
                     k += 1;
                 }
                 if chars.get(k) == Some(&'(') {
