@@ -56,6 +56,7 @@ pub struct Tab {
     pub cursor: Cursor,
     pub anchor: Cursor,
     pub scroll_y: f32,
+    pub last_edit: f64,
     pub want_focus: bool,
     pub lang: LanguageId,
     pub saved_version: u64,
@@ -78,6 +79,7 @@ impl Tab {
             cursor: Cursor::new(0, 0),
             anchor: Cursor::new(0, 0),
             scroll_y: 0.0,
+            last_edit: 0.0,
             want_focus: true,
             lang: LanguageId::PlainText,
             saved_version: 0,
@@ -1042,14 +1044,15 @@ impl EditorApp {
 
         // Prompt.
         if let Some(mut st) = self.prompt.take() {
-            let mut open = true;
-            let mut done = false;
+            let mut win_open = true;
+            // Some(true) => OK/Enter, Some(false) => Cancelar.
+            let mut result: Option<bool> = None;
             egui::Window::new(st.title.clone())
                 .collapsible(false)
                 .resizable(false)
                 .default_width(460.0)
                 .anchor(egui::Align2::CENTER_CENTER, Vec2::new(0.0, -40.0))
-                .open(&mut open)
+                .open(&mut win_open)
                 .show(ctx, |ui| {
                     let resp =
                         ui.add(egui::TextEdit::singleline(&mut st.buffer).desired_width(440.0));
@@ -1058,26 +1061,26 @@ impl EditorApp {
                         st.want_focus = false;
                     }
                     ui.horizontal(|ui| {
-                        if ui.button("OK").clicked() {
-                            done = true;
+                        if ui.add(egui::Button::new("OK")).clicked() {
+                            result = Some(true);
                         }
-                        if ui.button("Cancelar").clicked() {
-                            open = false;
+                        if ui.add(egui::Button::new("Cancelar")).clicked() {
+                            result = Some(false);
                         }
                     });
                     if ui.input(|i| i.key_pressed(Key::Enter)) {
-                        done = true;
+                        result = Some(true);
                     }
                 });
-            if !open {
+            if !win_open {
                 self.prompt = None;
-            } else {
-                if done {
-                    self.prompt = None;
+            } else if let Some(ok) = result {
+                self.prompt = None;
+                if ok {
                     self.execute_prompt(st.kind, &st.buffer);
-                } else {
-                    self.prompt = Some(st);
                 }
+            } else {
+                self.prompt = Some(st);
             }
         }
     }
