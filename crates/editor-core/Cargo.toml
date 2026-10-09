@@ -1,0 +1,11 @@
+[package]
+name = "openbrains-editor-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Buffer de texto, cursor e realce de sintaxe do OpenBrains (sem GUI)"
+
+[dependencies]
+openbrains-common = { path = "../common" }
+unicode-segmentation = "1"

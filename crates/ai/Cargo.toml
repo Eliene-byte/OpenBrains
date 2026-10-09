@@ -1,0 +1,11 @@
+[package]
+name = "openbrains-ai"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Motor de IA determinístico e ultra-leve do OpenBrains (completar, analisar, snippets)"
+
+[dependencies]
+openbrains-common = { path = "../common" }
+openbrains-editor-core = { path = "../editor-core" }
